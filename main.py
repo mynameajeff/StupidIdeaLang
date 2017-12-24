@@ -50,7 +50,6 @@ class StupidIdea:
         sys.exit()
 
     def check_token(self):
-        # print(self.statement[self.token_index])
 
         if self.token in ("<", "/"):
             token_before = self.statement[self.token_index - 1]
@@ -94,26 +93,21 @@ class StupidIdea:
 
                         self.STATEMENT_COMPLETE = True
 
-                        # print(self.stack)
                 else:
                     self.ERROR_HANDLER("INVSYNTAX")
 
             elif token_before == ",":
                 if token_after == "s":
-                    # print("OKAY, SO WE'RE TAKING INPUT HERE")
 
                     temp = input()
 
                     self.stack.append([char for char in temp])
-                    # print(self.stack)
                 else:
                     self.ERROR_HANDLER("INVSYNTAX")
             else:
                 self.ERROR_HANDLER("INVSYNTAX")
 
     def parse(self):
-
-        # print(self.scriptstr)
 
         if self.scriptstr[0][0] != ":":
             self.ERROR_HANDLER("NOSTART")
