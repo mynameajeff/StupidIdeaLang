@@ -19,7 +19,7 @@ class StupidIdea:
                 del self.scriptstr[i]
 
                 for z in range(len(temp_variable)):
-                    self.scriptstr.insert(i+z, temp_variable[z])
+                    self.scriptstr.insert(i + z, temp_variable[z])
 
                 isSemi = True
                 break
@@ -85,14 +85,12 @@ class StupidIdea:
                 if token_after == ".":
 
                     if len(self.stack) > 0:
-                        for ind, char_to_push in enumerate(self.stack[0]):
+                        for char_to_push in self.stack[0]:
                             print(char_to_push, end = "")
-                            del char_to_push
 
                         del self.stack[0]
 
                         self.STATEMENT_COMPLETE = True
-
                 else:
                     self.ERROR_HANDLER("INVSYNTAX")
 
