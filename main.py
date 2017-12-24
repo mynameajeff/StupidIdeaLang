@@ -11,7 +11,7 @@ class StupidIdea:
         with open(script_string, "r") as fl:
             self.scriptstr = ''.join(
                 [line for line in fl]
-            )[::-1][1:].split("\n")
+            )[::-1][1:].replace(";\\", chr(0x4)).split("\n")
 
         for i, line in enumerate(self.scriptstr):
             if ";" in line:
@@ -30,6 +30,10 @@ class StupidIdea:
         if not isSemi:
             if len(self.scriptstr) == 1:
                 self.scriptstr = list(self.scriptstr)
+
+        for lindex, line in enumerate(self.scriptstr):
+            if chr(0x4) in line:
+                self.scriptstr[lindex] = self.scriptstr[lindex].replace(chr(0x4), ";")
 
         self.ERROR_CODES = {
             "NOSTART" : (170, "NO START CHARACTER GIVEN"),
@@ -52,8 +56,11 @@ class StupidIdea:
     def check_token(self):
 
         if self.token in ("<", "/"):
-            token_before = self.statement[self.token_index - 1]
-            token_after  = self.statement[self.token_index + 1]
+            try:
+                token_before = self.statement[self.token_index - 1]
+                token_after  = self.statement[self.token_index + 1]
+            except IndexError:
+                self.ERROR_HANDLER("INVSYNTAX")
 
             if self.STATEMENT_COMPLETE:
                 self.ERROR_HANDLER("MULSTONLN")
@@ -68,6 +75,8 @@ class StupidIdea:
                             if x == "\"":
                                 endofstr_index = i
                                 break
+                    else:
+                        self.ERROR_HANDLER("INVSYNTAX")
 
                     newstr = self.statement[self.token_index + 2:endofstr_index][::-1] \
                         .replace("\\n", "\n") \
@@ -102,6 +111,7 @@ class StupidIdea:
                     self.stack.append([char for char in temp])
                 else:
                     self.ERROR_HANDLER("INVSYNTAX")
+
             else:
                 self.ERROR_HANDLER("INVSYNTAX")
 
